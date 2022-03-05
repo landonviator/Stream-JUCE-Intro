@@ -13,7 +13,7 @@
 //==============================================================================
 /**
 */
-class StreamJUCEIntroAudioProcessor  : public juce::AudioProcessor
+class StreamJUCEIntroAudioProcessor  : public juce::AudioProcessor, juce::AudioProcessorValueTreeState::Listener
 {
 public:
     //==============================================================================
@@ -53,7 +53,18 @@ public:
     void getStateInformation (juce::MemoryBlock& destData)override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
+    /** Value Trees =====================================================*/
+    juce::AudioProcessorValueTreeState treeState;
+    
 private:
+    
+    float rawGain = 1.0;
+    bool phase = false;
+    
+    /** Parameters ======================================================*/
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+    void parameterChanged (const juce::String& parameterID, float newValue) override;
+    
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (StreamJUCEIntroAudioProcessor)
 };
