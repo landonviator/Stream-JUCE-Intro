@@ -5,6 +5,12 @@
               companyName="Viator DSP" cppLanguageStandard="17">
   <MAINGROUP id="Y3vcgX" name="Stream-JUCE-Intro">
     <GROUP id="{1606ED9F-749F-2BFD-15E8-9EB1F752A4D1}" name="Source">
+      <GROUP id="{205B72DB-F06F-4689-95E1-1ED1399F9B12}" name="Dials">
+        <FILE id="c8Gyhj" name="DemoDial.cpp" compile="1" resource="0" file="Source/Dials/DemoDial.cpp"/>
+      </GROUP>
+      <GROUP id="{C8C9BF26-1F09-05B6-4FAD-503BC25C71E8}" name="Window">
+        <FILE id="TfAQzx" name="InitWindow.cpp" compile="1" resource="0" file="Source/Window/InitWindow.cpp"/>
+      </GROUP>
       <FILE id="XuJ9Am" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="F7yDO4" name="PluginProcessor.h" compile="0" resource="0"

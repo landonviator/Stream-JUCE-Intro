@@ -204,8 +204,8 @@ bool StreamJUCEIntroAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* StreamJUCEIntroAudioProcessor::createEditor()
 {
-    //return new StreamJUCEIntroAudioProcessorEditor (*this);
-    return new juce::GenericAudioProcessorEditor (*this);
+    return new StreamJUCEIntroAudioProcessorEditor (*this);
+    //return new juce::GenericAudioProcessorEditor (*this);
 }
 
 //==============================================================================

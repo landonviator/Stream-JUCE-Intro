@@ -2,6 +2,12 @@
 
 <Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="Stream-JUCE-Intro\Source\Dials">
+      <UniqueIdentifier>{C6B78990-9DCC-E623-1AD6-E2DF7F53F704}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Stream-JUCE-Intro\Source\Window">
+      <UniqueIdentifier>{13C86DA7-5F63-6653-7D25-039CFC50C5FC}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Stream-JUCE-Intro\Source">
       <UniqueIdentifier>{948AA5A4-EC56-0BC0-C28C-B36651FE9D74}</UniqueIdentifier>
     </Filter>
@@ -469,6 +475,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\Dials\DemoDial.cpp">
+      <Filter>Stream-JUCE-Intro\Source\Dials</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Window\InitWindow.cpp">
+      <Filter>Stream-JUCE-Intro\Source\Window</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\PluginProcessor.cpp">
       <Filter>Stream-JUCE-Intro\Source</Filter>
     </ClCompile>
