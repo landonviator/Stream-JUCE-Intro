@@ -13,6 +13,6 @@
 void StreamJUCEIntroAudioProcessorEditor::initWindow()
 {
     setResizable(true, true);
-    setResizeLimits(300, 300, 600, 600);
+    setResizeLimits(600, 600, 900, 900);
     getConstrainer()->setFixedAspectRatio(1.0);
 }

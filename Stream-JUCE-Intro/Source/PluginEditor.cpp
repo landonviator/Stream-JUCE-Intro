@@ -12,39 +12,29 @@
 //==============================================================================
 StreamJUCEIntroAudioProcessorEditor::StreamJUCEIntroAudioProcessorEditor (StreamJUCEIntroAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
+, dial(" dB", -60.0, 24.0, 0.01, 0.0)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     
-    //initDial();
     dialAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "gain", dial);
-    dial.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    dial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 72, 32);
-    dial.setRange(-24.0, 24.0, 0.1);
-    dial.setDoubleClickReturnValue(true, 0.0);
-    dial.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colours::whitesmoke.withAlpha(0.5f));
-    dial.setColour(juce::Slider::ColourIds::textBoxOutlineColourId, juce::Colours::transparentBlack);
     addAndMakeVisible(dial);
+    dial.setDialStyle(viator_gui::Dial::DialStyle::kFullDial);
+    dial.forceShadow();
     
     buttonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.treeState, "phase", button);
     addAndMakeVisible(button);
     button.setButtonText("Phase");
-    button.setClickingTogglesState(true);
-    button.setColour(juce::TextButton::ColourIds::buttonOnColourId, juce::Colours::lightgoldenrodyellow);
-    button.setColour(juce::TextButton::ColourIds::buttonColourId, juce::Colours::dimgrey);
-    button.setColour(juce::TextButton::ColourIds::textColourOffId, juce::Colours::black);
-    button.setColour(juce::TextButton::ColourIds::textColourOnId, juce::Colours::black);
     
     addAndMakeVisible(dialLabel);
     dialLabel.setText("Gain", juce::dontSendNotification);
     dialLabel.attachToComponent(&dial, false);
-    dialLabel.setJustificationType(juce::Justification::centred);
     
     addAndMakeVisible(border);
     border.setText("Utility");
     
     initWindow();
-    setSize (300, 300);
+    setSize (600, 600);
 }
 
 StreamJUCEIntroAudioProcessorEditor::~StreamJUCEIntroAudioProcessorEditor()
@@ -54,8 +44,9 @@ StreamJUCEIntroAudioProcessorEditor::~StreamJUCEIntroAudioProcessorEditor()
 //==============================================================================
 void StreamJUCEIntroAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (juce::Colours::black.brighter(0.1));
+    juce::Rectangle<int> background = getLocalBounds();
+    g.setGradientFill(juce::ColourGradient::vertical(juce::Colour::fromFloatRGBA(0.18f, 0.20f, 0.24f, 1.0), getHeight() * 0.1, juce::Colour::fromFloatRGBA(0.12f, 0.14f, 0.18f, 1.0), getHeight() * 0.9));
+    g.fillRect(background);
 }
 
 void StreamJUCEIntroAudioProcessorEditor::resized()
@@ -68,7 +59,7 @@ void StreamJUCEIntroAudioProcessorEditor::resized()
     
     dial.setBounds(leftMargin, topMargin, dialSize, dialSize);
     button.setBounds(dial.getX() + dial.getWidth() * 0.33, dial.getY() + dial.getHeight(), buttonWidth, buttonHeight);
-    border.setBounds(leftMargin, topMargin * 0.25, dialSize, dial.getY() + dial.getHeight() + button.getHeight() + 10);
+    border.setBounds(getLocalBounds().withSizeKeepingCentre(getWidth() * 0.95, getWidth() * 0.95));
 }
 
 void StreamJUCEIntroAudioProcessorEditor::initDial()

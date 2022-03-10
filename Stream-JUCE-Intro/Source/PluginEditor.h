@@ -31,12 +31,12 @@ private:
     
     void initWindow();
     
-    juce::Slider dial;
+    viator_gui::Dial dial;
     void initDial();
     
-    juce::TextButton button;
-    juce::Label dialLabel;
-    juce::GroupComponent border;
+    viator_gui::PushButton button;
+    viator_gui::Label dialLabel;
+    viator_gui::Border border;
     
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> dialAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> buttonAttachment;

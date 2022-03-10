@@ -38,7 +38,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout StreamJUCEIntroAudioProcesso
     
   juce::StringArray choices = {"Compressor", "EQ", "Reverb"};
 
-  auto pGain = std::make_unique<juce::AudioParameterFloat>("gain", "Gain", -24.0, 24.0, 0.0);
+  auto pGain = std::make_unique<juce::AudioParameterFloat>("gain", "Gain", -60.0, 24.0, 0.0);
   auto pPhase = std::make_unique<juce::AudioParameterBool>("phase", "Phase", false);
   auto pChoice = std::make_unique<juce::AudioParameterChoice>("choice", "Choice", choices, 0);
     
@@ -53,7 +53,7 @@ void StreamJUCEIntroAudioProcessor::parameterChanged(const juce::String &paramet
 {
     if (parameterID == "gain")
     {
-        rawGain = juce::Decibels::decibelsToGain(newValue);
+        gainModule.setGainDecibels(newValue);
     }
     
     if (parameterID == "phase")
@@ -128,8 +128,22 @@ void StreamJUCEIntroAudioProcessor::changeProgramName (int index, const juce::St
 //==============================================================================
 void StreamJUCEIntroAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    phase = *treeState.getRawParameterValue("phase");
-    rawGain = juce::Decibels::decibelsToGain(static_cast<float>(*treeState.getRawParameterValue("gain")));
+    juce::dsp::ProcessSpec spec;
+    spec.sampleRate = sampleRate;
+    spec.maximumBlockSize = samplesPerBlock;
+    spec.numChannels = getTotalNumInputChannels();
+    
+    gainModule.prepare(spec);
+    gainModule.setRampDurationSeconds(0.02);
+    gainModule.setGainDecibels(getP("gain"));
+    
+    phase = getP("phase");
+    
+}
+
+float StreamJUCEIntroAudioProcessor::getP(std::string id)
+{
+    return treeState.getRawParameterValue(id)->load();
 }
 
 void StreamJUCEIntroAudioProcessor::releaseResources()
@@ -175,25 +189,7 @@ void StreamJUCEIntroAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     
     // My audio block object
     juce::dsp::AudioBlock<float> block (buffer);
-    
-    // My DSP block
-    for(int channel = 0; channel < block.getNumChannels(); ++channel)
-    {
-        auto* channelData = block.getChannelPointer(channel);
-        
-        for(int sample = 0; sample < block.getNumSamples(); ++sample)
-        {
-            if (phase)
-            {
-                channelData[sample] *= rawGain * -1.0;
-            }
-            
-            else
-            {
-                channelData[sample] *= rawGain;
-            }
-        }
-    }
+    gainModule.process(juce::dsp::ProcessContextReplacing<float>(block));
 }
 
 //==============================================================================
@@ -224,8 +220,8 @@ void StreamJUCEIntroAudioProcessor::setStateInformation (const void* data, int s
     if (tree.isValid())
     {
         treeState.state = tree;
-        phase = *treeState.getRawParameterValue("phase");
-        rawGain = juce::Decibels::decibelsToGain(static_cast<float>(*treeState.getRawParameterValue("gain")));
+        phase = getP("phase");
+        gainModule.setGainDecibels(getP("gain"));
     }
 }
 

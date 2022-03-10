@@ -56,14 +56,17 @@ public:
     /** Value Trees =====================================================*/
     juce::AudioProcessorValueTreeState treeState;
     
+    float getP(std::string id);
+    
 private:
     
-    float rawGain = 1.0;
     bool phase = false;
     
     /** Parameters ======================================================*/
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     void parameterChanged (const juce::String& parameterID, float newValue) override;
+    
+    juce::dsp::Gain<float> gainModule;
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (StreamJUCEIntroAudioProcessor)
